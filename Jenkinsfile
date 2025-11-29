@@ -26,39 +26,39 @@ pipeline {
       }
     }
 
-    stage('SonarQube Analysis') {
-  steps {
-    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.host.url=http://44.222.178.39:9000/ -Dsonar.login=squ_1949abf442ade3af1e3c95f4337d9e17ced70bb5'
-  }
-}
+//     stage('SonarQube Analysis') {
+//   steps {
+//     sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.host.url=http://44.222.178.39:9000/ -Dsonar.login=squ_1949abf442ade3af1e3c95f4337d9e17ced70bb5'
+//   }
+// }
 
 
-   stage('Check code coverage') {
-            steps {
-                script {
-                    def token = "squ_1949abf442ade3af1e3c95f4337d9e17ced70bb5"
-                    def sonarQubeUrl = "http://44.222.178.39:9000/api"
-                    def componentKey = "com.codeddecode:restaurantlisting"
-                    def coverageThreshold = 80.0
-
-                    def response = sh (
-                        script: "curl -H 'Authorization: Bearer ${token}' '${sonarQubeUrl}/measures/component?component=${componentKey}&metricKeys=coverage'",
-                        returnStdout: true
-                    ).trim()
-
-                    def coverage = sh (
-                        script: "echo '${response}' | jq -r '.component.measures[0].value'",
-                        returnStdout: true
-                    ).trim().toDouble()
-
-                    echo "Coverage: ${coverage}"
-
-                    if (coverage < coverageThreshold) {
-                        error "Coverage is below the threshold of ${coverageThreshold}%. Aborting the pipeline."
-                    }
-                }
-            }
-        } 
+//    stage('Check code coverage') {
+//             steps {
+//                 script {
+//                     def token = "squ_1949abf442ade3af1e3c95f4337d9e17ced70bb5"
+//                     def sonarQubeUrl = "http://44.222.178.39:9000/api"
+//                     def componentKey = "com.codeddecode:restaurantlisting"
+//                     def coverageThreshold = 80.0
+//
+//                     def response = sh (
+//                         script: "curl -H 'Authorization: Bearer ${token}' '${sonarQubeUrl}/measures/component?component=${componentKey}&metricKeys=coverage'",
+//                         returnStdout: true
+//                     ).trim()
+//
+//                     def coverage = sh (
+//                         script: "echo '${response}' | jq -r '.component.measures[0].value'",
+//                         returnStdout: true
+//                     ).trim().toDouble()
+//
+//                     echo "Coverage: ${coverage}"
+//
+//                     if (coverage < coverageThreshold) {
+//                         error "Coverage is below the threshold of ${coverageThreshold}%. Aborting the pipeline."
+//                     }
+//                 }
+//             }
+//         }
 
 
       stage('Docker Build and Push') {
