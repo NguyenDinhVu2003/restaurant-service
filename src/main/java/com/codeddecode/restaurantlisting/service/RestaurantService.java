@@ -20,7 +20,7 @@ public class RestaurantService {
     @Autowired
     RestaurantRepo restaurantRepo;
     //test CICD
-
+    //tesst
 
     public List<RestaurantDTO> findAllRestaurants() {
         List<Restaurant> restaurants = restaurantRepo.findAll();
